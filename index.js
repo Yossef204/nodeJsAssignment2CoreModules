@@ -1,5 +1,7 @@
 // // ASSIGNMENT 2
 const path = require("node:path");
+const fs = require("node:fs");
+
 // 1. Write a function that logs the current file path and directory. (0.5 Grade)
 // • Output Example:{File:“/home/user/project/index.js”, Dir:“/home/user/project”}
 file = __filename;
@@ -51,18 +53,55 @@ console.log(parsing("/home/app/main.js"));
 // 6. Write a function that checks whether a given path is absolute. (0.5 Grade)
 // • Input Example: /home/user/file.txt
 // • Output Example: true
+
+function isAbsolutePath(filePath){
+    return path.isAbsolute(filePath);
+}
+console.log(isAbsolutePath("/home/user/file.txt"));
+
+
 // 7. Write a function that joins multiple segments (0.5 Grade)
 // • Input:"src","components", "App.js"
 // • Output Example: src/components/App.js
+function joinPaths(...segments){
+    return path.join(...segments);
+}
+console.log(joinPaths("src","components", "App.js"));
+
+
 // 8. Write a function that resolves a relative path to an absolute one. (0.5 Grade)
 // • Input Example: ./index.js
 // • Output Example: /home/user/project/src/index.js
+function resolvePath(relativePath){
+    return path.resolve(relativePath);
+}
+console.log(resolvePath("./index.js"));
+
+
+
 // 9. Write a function that joins two paths. (0.5 Grade)
 // • Input Example: /folder1, folder2/file.txt
 // • Output Example: /folder1/folder2/file.txt
+function joinTwoPaths(path1, path2){
+    return path.join(path1, path2);
+}
+console.log(joinTwoPaths("/folder1", "folder2/file.txt"));
+
+
 // 10. Write a function that deletes a file asynchronously. (0.5 Grade)
 // • Input Example: /path/to/file.txt
 // • Output Example: The file.txt is deleted.
+function deleteFileAsync(filePath){
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error("Error deleting file:", err);
+            return;
+        };
+        console.log(`The ${path.basename(filePath)} is deleted.`);
+    });
+}
+
+deleteFileAsync("./temp.txt");
 // 11. Write a function that creates a folder synchronously. (1 Grade)
 // • Output Example: “Success”
 // 12. Create an event emitter that listens for a "start" event and logs a welcome message. (0.5 Grade)
