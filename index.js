@@ -1,6 +1,8 @@
 // // ASSIGNMENT 2
 const path = require("node:path");
 const fs = require("node:fs");
+const os = require("node:os");
+const { EventEmitter } = require('node:events');
 
 // 1. Write a function that logs the current file path and directory. (0.5 Grade)
 // • Output Example:{File:“/home/user/project/index.js”, Dir:“/home/user/project”}
@@ -104,18 +106,68 @@ function deleteFileAsync(filePath){
 deleteFileAsync("./temp.txt");
 // 11. Write a function that creates a folder synchronously. (1 Grade)
 // • Output Example: “Success”
+
+function createFolderSync(folderPath){
+    try {
+        fs.mkdirSync(folderPath);
+        console.log("Success");
+    } catch (err) {
+        console.error("Error creating folder:", err);
+    }
+}
+
+createFolderSync("./newFolder");
+
+
 // 12. Create an event emitter that listens for a "start" event and logs a welcome message. (0.5 Grade)
 // • Output Example: Welcome event triggered!
+
+const eventEmitter = new EventEmitter();
+eventEmitter.on('start', () => {
+    console.log("Welcome event triggered!");
+});
+eventEmitter.emit('start');
+
 // 13. Emit a custom "login" event with a username parameter. (0.5 Grade)
 // • Input Example:"Ahmed"
 // • Output Example: “User logged in: Ahmed”
+eventEmitter.on('login', (username) => {
+    console.log(`User logged in: ${username}`);
+});
+eventEmitter.emit('login', 'Ahmed');
+
+
 // 14. Read a file synchronously and log its contents. (1 Grade)
 // • Input Example:"./notes.txt"
 // • Output Example: the file content => “This is a note.”
+
+const fileContent = fs.readFileSync("./notes.txt", "utf8");
+console.log("the file content =>", fileContent);
+
 // 15. Write asynchronously to a file. (1 Grade)
 // • Input: path:"./async.txt", content:"Async save"
+
+fs.writeFile("./async.txt", "Async save", (err) => {
+    if (err) {
+        console.error("Error writing to file:", err);
+        return;
+    }
+    console.log("File written successfully.");
+});
+
 // 16. Check if a directory exists. (0.5 Grade)
 // • Input Example: "./notes.txt"
 // • Output Example: true
+
+function checkDirectoryExists(dirPath){
+    return fs.existsSync(dirPath);
+}
+console.log(checkDirectoryExists("./notes.txt"));
+
 // 17. Write a function that returns the OS platform and CPU architecture. (0.5 Grade)
 // • Output Example: {Platform: “win32”, Arch: “x64”}
+
+function getOSInfo(){
+    return {Platform: os.platform(), Arch: os.arch()};
+}
+console.log( getOSInfo());
